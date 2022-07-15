@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="house-plant">
 <main class="mt-5 bg-white">
     <router-view/>
     </main>
@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 export default {
   name: 'App'
