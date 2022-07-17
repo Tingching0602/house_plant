@@ -87,8 +87,10 @@
   </div>
 </template>
 <script>
+/*eslint-disable*/
 import authorizationAPI from './../apis/authorization'
 import { Toast } from './../utils/helpers'
+
 export default {
   name: 'SingUp',
   data () {
@@ -101,49 +103,44 @@ export default {
     }
   },
   methods: {
-    async handleSubmit () {
+    async handleSubmit() {
       try {
-        if (!this.name) {
+        if (
+          !this.name ||
+          !this.email ||
+          !this.password ||
+          !this.passwordCheck
+        ) {
           Toast.fire({
-            icon: 'warning',
-            title: '請輸入使用者名稱'
-          })
-          return
+            icon: "error",
+            title: "欄位不可留白",
+          });
+          return;
         }
-        if (!this.email) {
+        if (this.password !== this.passwordCheck) {
           Toast.fire({
-            icon: 'warning',
-            title: '請輸入 email'
-          })
-          return
+            icon: "error",
+            title: "密碼輸入不一致",
+          });
+          return;
         }
-        if (!this.password | !this.passwordCheck) {
-          Toast.fire({
-            icon: 'warning',
-            title: '請輸入 password'
-          })
-          return
-        }
-        this.isProcessing = true
         const { data } = await authorizationAPI.signUp({
           name: this.name,
           email: this.email,
           password: this.password,
-          passwordCheck: this.passwordCheck
-        })
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+          passwordCheck: this.passwordCheck,
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-        this.$router.push({ name: 'sign-in' })
+        this.$router.push("/signin");
       } catch (error) {
-        this.isProcessing = false
-        console.log(error)
         Toast.fire({
-          icon: 'error',
-          title: '無法註冊使用者，請稍後再試'
-        })
+          icon: "error",
+          title: "請稍後在試",
+        });
       }
-    }
-  }
+    },
+  },
 }
 </script>
