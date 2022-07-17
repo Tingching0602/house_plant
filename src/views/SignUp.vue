@@ -69,7 +69,7 @@
         type="submit"
         :disabled="isProcessing"
       >
-        {{ isProcessing ? '處理中' : '送出' }}
+        Submit
       </button>
 
       <div class="text-center mb-3">
@@ -122,8 +122,10 @@ export default {
             icon: "error",
             title: "密碼輸入不一致",
           });
+          this.passwordCheck = ''
           return;
         }
+        this.isProcessing = true
         const { data } = await authorizationAPI.signUp({
           name: this.name,
           email: this.email,
@@ -133,6 +135,11 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        Toast.fire({
+          icon:'success',
+          title: data.message
+        })
+        //成功登入後轉址登入頁
         this.$router.push("/signin");
       } catch (error) {
         Toast.fire({
